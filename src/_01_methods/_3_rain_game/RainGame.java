@@ -2,6 +2,9 @@ package _01_methods._3_rain_game;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 /*
  * Goal: Make a game where the user has to catch rain drops in a bucket!
@@ -44,11 +47,14 @@ import processing.core.PImage;
 public class RainGame extends PApplet {
     static final int WIDTH = 600;
     static final int HEIGHT = 600;
-
+    Random randy = new Random();
+    int speed = 20;
+    int dropX = randy.nextInt(601);
+    int dropY = -5;
     int score = 0;
     int bucketWidth = 50;
     int bucketHeight;
-    PImage bucket;
+    PImage person;
     int y;
     int x;
 
@@ -60,12 +66,22 @@ public class RainGame extends PApplet {
 
     @Override
     public void setup() {
-
+        person = loadImage("images/stickman2.png");
+        person.resize(90, 115);
     }
 
     @Override
     public void draw() {
-
+    	background(53, 214, 232);
+    	fill(42, 117, 247);
+    	stroke(42, 117, 247);
+    	ellipse(dropX, dropY, 30, 45);
+    	dropY+=speed;
+    	if(dropY >= HEIGHT) {
+    		dropY = -5;
+    		dropX = randy.nextInt(601);
+    	}
+    	image(person, mouseX, 474);
     }
 
     static public void main(String[] args) {
@@ -75,10 +91,10 @@ public class RainGame extends PApplet {
     /*********************** DO NOT MODIFY THE CODE BELOW ********************/
 
     void checkCatch(int x) {
-        if (x > mouseX && x < mouseX + bucketWidth) {
-            score++;
+        if (dropX > mouseX && dropX < mouseX + 90) {
+            JOptionPane.showMessageDialog(null, "you lost. u stink");
         } else if (score > 0) {
-            score--;
+            score++;
         }
         println("Your score is now: " + score);
     }
