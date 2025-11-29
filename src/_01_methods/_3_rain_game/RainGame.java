@@ -45,57 +45,82 @@ import javax.swing.JOptionPane;
  *    text("Score: " + score, 20, 20);
  */
 public class RainGame extends PApplet {
-    static final int WIDTH = 600;
-    static final int HEIGHT = 600;
-    Random randy = new Random();
-    int speed = 20;
-    int dropX = randy.nextInt(601);
-    int dropY = -5;
-    int score = 0;
-    int bucketWidth = 50;
-    int bucketHeight;
-    PImage person;
-    int y;
-    int x;
+	static final int WIDTH = 600;
+	static final int HEIGHT = 600;
+	Random randy = new Random();
+	int speed = 20;
+	int dropX = randy.nextInt(601);
+	int drop2X = randy.nextInt(601);
+	int dropY = -5;
+	int drop2Y = -200;
+	int score = 0;
+	int bucketWidth = 50;
+	int bucketHeight;
+	PImage person;
+	int y;
+	int x;
 
-    // Sets the size of your canvas
-    @Override
-    public void settings() {
-        size(WIDTH, HEIGHT);
-    }
+	// Sets the size of your canvas
+	@Override
+	public void settings() {
+		size(WIDTH, HEIGHT);
+	}
 
-    @Override
-    public void setup() {
-        person = loadImage("images/stickman2.png");
-        person.resize(90, 115);
-    }
+	@Override
+	public void setup() {
+		person = loadImage("images/stickman2.png");
+		person.resize(90, 115);
+	}
 
-    @Override
-    public void draw() {
-    	background(53, 214, 232);
-    	fill(42, 117, 247);
-    	stroke(42, 117, 247);
-    	ellipse(dropX, dropY, 30, 45);
-    	dropY+=speed;
-    	if(dropY >= HEIGHT) {
-    		dropY = -5;
-    		dropX = randy.nextInt(601);
-    	}
-    	image(person, mouseX, 474);
-    }
+	@Override
+	public void draw() {
+		background(53, 214, 232);
+		fill(129,255,0);
+		stroke(129,255,0);
+		ellipse(dropX, dropY, 30, 45);
+		dropY += speed;
+		if (dropY >= HEIGHT) {
+			dropY = -5;
+			dropX = randy.nextInt(601);
+			score++;
+		}
+		if (dropY >= 480) {
+			checkCatch(dropX);
+		}
+		if (score > 50) {
+			ellipse(drop2X, drop2Y, 30, 45);
+			drop2Y += speed;
+			if (drop2Y >= HEIGHT) {
+				drop2Y = -5;
+				drop2X = randy.nextInt(601);
+				score++;
+			}
+			if (drop2Y >= 480) {
+				checkCatch(drop2X);
+			}
+		}
+		image(person, mouseX - 45, 474);
+		fill(0, 0, 0);
+		textSize(16);
+		text("Score: " + score, 20, 20);
+		text("do you have ultra instinct?", 20, 40);
+	}
 
-    static public void main(String[] args) {
-        PApplet.main(RainGame.class.getName());
-    }
-    
-    /*********************** DO NOT MODIFY THE CODE BELOW ********************/
+	static public void main(String[] args) {
+		PApplet.main(RainGame.class.getName());
+	}
 
-    void checkCatch(int x) {
-        if (dropX > mouseX && dropX < mouseX + 90) {
-            JOptionPane.showMessageDialog(null, "you lost. u stink");
-        } else if (score > 0) {
-            score++;
-        }
-        println("Your score is now: " + score);
-    }
+	void checkCatch(int dropX) {
+		if (dropX > mouseX - 30 && dropX < mouseX + 30) {
+			int retry = JOptionPane.showOptionDialog(null, "u died", "", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String [] {"Take a shot at another life", "GET OUT! U DONT BELONG HERE"}, null);
+			if(retry == 0) {
+				drop2Y = -200;
+				dropY = -5;
+				score = 0;
+			}
+			else {
+				System.exit(0);
+			}
+		}
+	}
 }
