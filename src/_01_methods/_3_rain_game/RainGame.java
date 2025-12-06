@@ -51,11 +51,14 @@ public class RainGame extends PApplet {
 	int speed = 20;
 	int dropX = randy.nextInt(601);
 	int drop2X = randy.nextInt(601);
+	int drop3X = randy.nextInt(601);
 	int dropY = -5;
-	int drop2Y = -200;
+	int drop2Y = -175;
+	int drop3Y = -345;
 	int score = 0;
 	int bucketWidth = 50;
 	int bucketHeight;
+	int hearts = 3;
 	PImage person;
 	int y;
 	int x;
@@ -83,6 +86,9 @@ public class RainGame extends PApplet {
 			dropY = -5;
 			dropX = randy.nextInt(601);
 			score++;
+			if(score >= 500) {
+				JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
+			}
 		}
 		if (dropY >= 480) {
 			checkCatch(dropX);
@@ -94,9 +100,27 @@ public class RainGame extends PApplet {
 				drop2Y = -5;
 				drop2X = randy.nextInt(601);
 				score++;
+				if(score >= 500) {
+					JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
+				}
 			}
 			if (drop2Y >= 480) {
 				checkCatch(drop2X);
+			}
+		}
+		if (score > 100) {
+			ellipse(drop3X, drop3Y, 30, 45);
+			drop2Y += speed;
+			if (drop3Y >= HEIGHT) {
+				drop3Y = -5;
+				drop3X = randy.nextInt(601);
+				score++;
+				if(score >= 500) {
+					JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
+				}
+			}
+			if (drop3Y >= 480) {
+				checkCatch(drop3X);
 			}
 		}
 		image(person, mouseX - 45, 474);
@@ -104,6 +128,7 @@ public class RainGame extends PApplet {
 		textSize(16);
 		text("Score: " + score, 20, 20);
 		text("do you have ultra instinct?", 20, 40);
+		text("ur lives: " + hearts, 20, 60);
 	}
 
 	static public void main(String[] args) {
@@ -112,15 +137,20 @@ public class RainGame extends PApplet {
 
 	void checkCatch(int dropX) {
 		if (dropX > mouseX - 30 && dropX < mouseX + 30) {
-			int retry = JOptionPane.showOptionDialog(null, "u died", "", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String [] {"Take a shot at another life", "GET OUT! U DONT BELONG HERE"}, null);
-			if(retry == 0) {
-				drop2Y = -200;
-				dropY = -5;
-				score = 0;
-			}
-			else {
-				System.exit(0);
+			hearts--;
+			if(hearts <= 0) {
+				int retry = JOptionPane.showOptionDialog(null, "u died", "", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String [] {"Get another life", "Accept your fate and die"}, null);
+				if(retry == 0) {
+					drop2Y = -200;
+					dropY = -5;
+					score = 0;
+					hearts = 3;
+				}
+				else {
+					System.exit(0);
+				}
+			
 			}
 		}
+	}	
 	}
-}
