@@ -44,113 +44,109 @@ import javax.swing.JOptionPane;
  *    textSize(16);
  *    text("Score: " + score, 20, 20);
  */
-public class RainGame extends PApplet {
-	static final int WIDTH = 600;
-	static final int HEIGHT = 600;
-	Random randy = new Random();
-	int speed = 20;
-	int dropX = randy.nextInt(601);
-	int drop2X = randy.nextInt(601);
-	int drop3X = randy.nextInt(601);
-	int dropY = -5;
-	int drop2Y = -175;
-	int drop3Y = -345;
-	int score = 0;
-	int bucketWidth = 50;
-	int bucketHeight;
-	int hearts = 3;
-	PImage person;
-	int y;
-	int x;
-
-	// Sets the size of your canvas
-	@Override
-	public void settings() {
-		size(WIDTH, HEIGHT);
-	}
-
-	@Override
-	public void setup() {
-		person = loadImage("images/stickman2.png");
-		person.resize(90, 115);
-	}
-
-	@Override
-	public void draw() {
-		background(53, 214, 232);
-		fill(129,255,0);
-		stroke(129,255,0);
-		ellipse(dropX, dropY, 30, 45);
-		dropY += speed;
-		if (dropY >= HEIGHT) {
-			dropY = -5;
-			dropX = randy.nextInt(601);
-			score++;
-			if(score >= 500) {
-				JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
-			}
+	public class RainGame extends PApplet {
+		static final int WIDTH = 600;
+		static final int HEIGHT = 600;
+		Random randy = new Random();
+		int speed = 20;
+		int dropX = randy.nextInt(601);
+		int drop2X = randy.nextInt(601);
+		int drop3X = randy.nextInt(601);
+		int dropY = -5;
+		int drop2Y = -175;
+		int drop3Y = -345;
+		int score = 0;
+		int bucketWidth = 50;
+		int bucketHeight;
+		PImage person;
+		int y;
+		int x;
+	
+		// Sets the size of your canvas
+		@Override
+		public void settings() {
+			size(WIDTH, HEIGHT);
 		}
-		if (dropY >= 480) {
-			checkCatch(dropX);
+	
+		@Override
+		public void setup() {
+			person = loadImage("images/stickman2.png");
+			person.resize(90, 115);
 		}
-		if (score > 50) {
-			ellipse(drop2X, drop2Y, 30, 45);
-			drop2Y += speed;
-			if (drop2Y >= HEIGHT) {
-				drop2Y = -5;
-				drop2X = randy.nextInt(601);
+	
+		@Override
+		public void draw() {
+			background(53, 214, 232);
+			fill(129,255,0);
+			stroke(129,255,0);
+			ellipse(dropX, dropY, 30, 45);
+			dropY += speed;
+			if (dropY >= HEIGHT) {
+				dropY = -5;
+				dropX = randy.nextInt(601);
 				score++;
 				if(score >= 500) {
 					JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
 				}
 			}
-			if (drop2Y >= 480) {
-				checkCatch(drop2X);
+			if (dropY >= 480) {
+				checkCatch(dropX);
 			}
-		}
-		if (score > 100) {
-			ellipse(drop3X, drop3Y, 30, 45);
-			drop2Y += speed;
-			if (drop3Y >= HEIGHT) {
-				drop3Y = -5;
-				drop3X = randy.nextInt(601);
-				score++;
-				if(score >= 500) {
-					JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
+			if (score > 50) {
+				ellipse(drop2X, drop2Y, 30, 45);
+				drop2Y += speed;
+				if (drop2Y >= HEIGHT) {
+					drop2Y = -5;
+					drop2X = randy.nextInt(601);
+					score++;
+					if(score >= 500) {
+						JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
+					}
+				}
+				if (drop2Y >= 480) {
+					checkCatch(drop2X);
 				}
 			}
-			if (drop3Y >= 480) {
-				checkCatch(drop3X);
+			if (score > 100) {
+				ellipse(drop3X, drop3Y, 30, 45);
+				drop2Y += speed;
+				if (drop3Y >= HEIGHT) {
+					drop3Y = -5;
+					drop3X = randy.nextInt(601);
+					score++;
+					if(score >= 500) {
+						JOptionPane.showMessageDialog(null, "You got jebaited. You just wasted 10 minutes of ur life. BWAHAHAHAHAHAHAHAHAHHAHAHAHAHAHHAHAHAHAHAHAH! U STINK");
+					}
+				}
+				if (drop3Y >= 480) {
+					checkCatch(drop3X);
+				}
 			}
+			image(person, mouseX - 45, 474);
+			fill(0, 0, 0);
+			textSize(16);
+			text("Score: " + score, 20, 20);
+			text("do you have ultra instinct?", 20, 40);
 		}
-		image(person, mouseX - 45, 474);
-		fill(0, 0, 0);
-		textSize(16);
-		text("Score: " + score, 20, 20);
-		text("do you have ultra instinct?", 20, 40);
-		text("ur lives: " + hearts, 20, 60);
-	}
-
-	static public void main(String[] args) {
-		PApplet.main(RainGame.class.getName());
-	}
-
-	void checkCatch(int dropX) {
-		if (dropX > mouseX - 30 && dropX < mouseX + 30) {
-			hearts--;
-			if(hearts <= 0) {
+	
+		static public void main(String[] args) {
+			PApplet.main(RainGame.class.getName());
+		}
+	
+		void checkCatch(int dropX) {
+			if (dropX > mouseX - 30 && dropX < mouseX + 30) {
 				int retry = JOptionPane.showOptionDialog(null, "u died", "", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String [] {"Get another life", "Accept your fate and die"}, null);
 				if(retry == 0) {
-					drop2Y = -200;
-					dropY = -5;
-					score = 0;
-					hearts = 3;
-				}
-				else {
-					System.exit(0);
-				}
-			
+						drop3Y = -345;
+						drop2Y = -200;
+						dropY = -5;
+						score = 0;
+					}
+					else {
+						System.exit(0);
+					}
+				
+				
 			}
+		}	
 		}
-	}	
-	}
