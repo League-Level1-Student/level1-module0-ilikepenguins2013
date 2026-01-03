@@ -9,6 +9,7 @@ import processing.core.PApplet;
 public class FlappyBird extends PApplet {
     static final int WIDTH = 800;
     static final int HEIGHT = 600;
+    int score = 0;
     int birdX = 60;
     int birdY = 300;
     int birdYVelocity = -10;
@@ -17,7 +18,7 @@ public class FlappyBird extends PApplet {
     int upperPipeHeight = (int) random(100, 400);
     int pipeGap = 100;
     int lowerY = upperPipeHeight + pipeGap;
-    int pipeWidth = 80;
+    int pipeWidth = 70;
     Random random = new Random();
     int something = random.nextInt(7);
 
@@ -35,6 +36,8 @@ public class FlappyBird extends PApplet {
     public void draw() {
     	background(135, 206, 235);
     	noStroke();
+    	textSize(20);
+    	text("Score: " + score, 705, 20);
     	fill(72, 62, 73);
     	ellipse(birdX, birdY, 45, 45);
     	birdY+=birdYVelocity;
@@ -42,8 +45,10 @@ public class FlappyBird extends PApplet {
     	fill(30, 240, 56);
     	rect(pipeX, 0, pipeWidth, upperPipeHeight);
     	rect(pipeX, lowerY, pipeWidth, 700);
-    	pipeX-=8;
+    	pipeX-=10;
     	teleportPipes();
+    	fill(105,111,111);
+    	rect(0, 540, WIDTH, 60);
     	if(intersectsPipes() == true) {
     		int retry = JOptionPane.showOptionDialog(null, "u died", "", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String [] {"revive :)", "ragequit", "..."}, null);
     		if(retry == 0) {
@@ -60,13 +65,40 @@ public class FlappyBird extends PApplet {
     		    pipeGap = 100;
     		    lowerY = upperPipeHeight + pipeGap;
     		    pipeWidth = 80;
+    		    score = 0;
     		}
     		else if(retry == 1) {
         		System.exit(0);
         	}
     	}
-    		
+    	if(touchesGround() == true) {
+    		int retry = JOptionPane.showOptionDialog(null, "u died", "", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String [] {"revive :)", "ragequit", "..."}, null);
+    		if(retry == 0) {
+    			JOptionPane.showMessageDialog(null, "HA! bro really thought");
+    			System.exit(0);
+    		}
+    		else if(retry == 2) {	
+    			birdX = 60;
+    		    birdY = 300;
+    		    birdYVelocity = -10;
+    		    gravity = 1;
+    		    pipeX = 700;
+    		    upperPipeHeight = (int) random(100, 400);
+    		    pipeGap = 100;
+    		    lowerY = upperPipeHeight + pipeGap;
+    		    pipeWidth = 80;
+    		    score = 0;
+    		}
+    		else if(retry == 1) {
+        		System.exit(0);
+        	}
     	}
+    	if(playerWins() == true) {
+    		textSize(67);
+    		text("67 67 67", 67, 67);
+    	}
+    		
+    }
     
     
     public void teleportPipes() {
@@ -74,6 +106,7 @@ public class FlappyBird extends PApplet {
     		pipeX = 800;
     		upperPipeHeight = (int) random(100, 400);
     		lowerY = upperPipeHeight + pipeGap;
+    		score++;
     	}
     }
     
@@ -83,7 +116,25 @@ public class FlappyBird extends PApplet {
        else if (birdY>lowerY && birdX > pipeX && birdX < (pipeX+pipeWidth)) {
            return true; }
        else { return false; }
-}
+    }
+    
+    boolean touchesGround() {
+    	if (birdY + 23 > 740) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+
+    boolean playerWins() {
+    	if(score >= 67) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
     
     public void mousePressed() {
     	if(mousePressed) {
